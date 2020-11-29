@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link type="stylesheet" src="/bootstap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/bootstrap.css">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <nav class="navbar sticky-top navbar-light bg-dark">
+        <a class="navbar-brand" href="#" ><h1 class="display-5" style="color: azure;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-weight: 800;">RESTful API</h1></a>
+        <div class="btn-group btn-group-ls" role="group" aria-label="Basic example">
+           <a href="/addPost" class="btn btn-secondry">#NewPost</a>
+        </div>
+    </nav>
+    <div class="container">
+           <% for(let i of post) { %>
+            <div class="row" style="border: 1px solid #dedcd7;"></div> 
+            <h4 class="display-5" style="font-weight: 800; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                <%= i.topic %> </h4>
+        <div class="card mb-3" style="margin-bottom: 1px solid black;">
+            <img class="card-img-top" src="<%= i.pic %> " alt="Card image cap">
+            <div class="card-body">
+              <p class="card-text"><small class="text-muted"><%= i.created_at  %> </small></p>
+              <blockquote class="blockquote mb-0">
+                <p><%= i.content.substring(0,100)+"...." %> </p>
+                <a href="/blog/<%= i._id %> " >Read More</u></a>
+                <footer class="blockquote-footer"><%= i.name %> <cite title="Source Title">Author</cite></footer>
+              </blockquote>
+            </div>
+        </div> <% } %> 
+    </div>
+</body>
+</html>
