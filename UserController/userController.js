@@ -91,7 +91,7 @@ export class UserController
        const userName=req.body.name;
        const content=req.body.content;
        const topic=req.body.topic;
-       const imageUrl=+req.file.path.replace(/\\/g,'/');
+       const imageUrl=req.file.path.replace(/\\/g,'/');
        const data={
            name:userName,
            pic:imageUrl,
