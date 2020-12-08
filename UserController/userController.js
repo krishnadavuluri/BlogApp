@@ -1,10 +1,11 @@
 import User from "../UserModel/userModel.js";
+import cloudinary from 'cloudinary';
 export class UserController
 {
     static async show(req,res)
     {
-        try{
-            console.log('hoga');
+        try
+        {
         const topic=await User.findOne({_id:req.params.id});
         res.render('show',{post:topic});
         }
@@ -15,24 +16,23 @@ export class UserController
      static async updatePost(req,res)
      {
          const id=req.params.id;
-         console.log(req.body);
          try
          {
            if(req.file)
            {
-              const filePath=req.file.path.replace(/\\/g,'/');
-              console.log(filePath);
-              await User.findOneAndUpdate({_id:id},{topic:req.body.topic,pic:filePath,name:req.body.name,content:req.body.content},{new:true});
+              const filePath=req.file.path;
+              var post=await User.findById({_id:id});
+              var Cloudinary=cloudinary.v2;
+              await Cloudinary.uploader.destroy(post.fileName);
+              await User.findOneAndUpdate({_id:id},{topic:req.body.topic,filePath:req.file.filename,pic:filePath,name:req.body.name,content:req.body.content},{new:true});
               const allPost=await User.find();
               res.render('home',{post:allPost});
            }
            else
            {
-             console.log(req.body);
+            
              await User.findOneAndUpdate({_id:id},{topic:req.body.topic,name:req.body.name,content:req.body.content},{new:true});
-             console.log("File is not uploaded");
              const allPost=await User.find();
-             console.log('this one update called!');
              res.render('home',{post:allPost});
            }
         }
@@ -40,25 +40,6 @@ export class UserController
         {
                  res.redirect('edit');
         }
-        //  try
-        //  {
-             
-        //      if(!req.file)
-        //      {
-        //       await User.findOneAndUpdate({_id:id},{topic:req.body.topic,name:req.body.name,content:req.body.content},{new:true});
-        //      }
-        //      else
-        //      {
-        //       await User.findOneAndUpdate({_id:id},{topic:req.body.topic,pic:filePath,name:req.body.name,content:req.body.content},{new:true});
-        //      }
-        //      const allPost=await User.find();
-        //      console.log('this one update called!');
-        //      res.render('home',{post:allPost});
-        //  }
-        //  catch(e)
-        //  {
-        //      res.redirect('edit');
-        //  }
      }
      static async editPost(req,res)
      {
@@ -77,26 +58,32 @@ export class UserController
      {
          try
          {
-         await User.deleteOne({_id:req.params.id});
-         const allPost= await User.find();
-         res.render('home',{post:allPost});
-         }
+             var post=await User.findById({_id:req.params.id});
+             var Cloudinary=cloudinary.v2;
+             await Cloudinary.uploader.destroy(post.fileName);
+             await User.deleteOne({_id:req.params.id});
+             const allPost= await User.find();
+             res.render('home',{post:allPost});
+          }
          catch(e)
-         {
-             console('Err');
-         }
+          {
+              console.log('Err');
+          }
      }
     static async addNewPost(req,res)
     {
+    
        const userName=req.body.name;
        const content=req.body.content;
        const topic=req.body.topic;
-       const imageUrl=req.file.path.replace(/\\/g,'/');
+       const imageUrl=req.file.path;
+      // console.log(req.file);
        const data={
            name:userName,
            pic:imageUrl,
            content:content,
-           topic:topic
+           topic:topic,
+           fileName:req.file.filename
        }
        try
        {

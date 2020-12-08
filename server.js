@@ -21,7 +21,6 @@ export class server
     saticFile()
     {
         this.app.use(express.static('public'));
-        this.app.use('/public/images',express.static('public//images'));
         this.app.use(express.static('views'));
     }
     bodyParser()
